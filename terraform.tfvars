@@ -12,16 +12,10 @@ vpc_cidr             = "10.1.0.0/16"
 private_subnets_cidr = ["10.1.10.0/24", "10.1.11.0/24"]
 public_subnets_cidr  = ["10.1.20.0/24", "10.1.21.0/24"]
 
-
 cluster_min_size    = 1
 cluster_max_size    = 1
 cluster_size        = 1
 deployment_strategy = "CodeDeployDefault.ECSAllAtOnce"
-                      # CodeDeployDefault.ECSAllAtOnce
-                      # CodeDeployDefault.ECSLinear10PercentEvery1Minutes
-                      # CodeDeployDefault.ECSLinear10PercentEvery3Minutes
-                      # CodeDeployDefault.ECSCanary10Percent5Minutes
-                      # CodeDeployDefault.ECSCanary10Percent15Minutes
 app1_ecs_task = {
   name               = "%appname%-app1"
   container_name     = "app"
