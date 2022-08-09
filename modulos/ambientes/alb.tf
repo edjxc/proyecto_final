@@ -84,7 +84,7 @@ resource "aws_lb_target_group" "tg_app1" {
   protocol             = "HTTP"
   vpc_id               = aws_vpc.vpc.id
   deregistration_delay = 60
-
+  target_type          = "ip"
   health_check {
     path                = "/"
     healthy_threshold   = 2
@@ -101,6 +101,7 @@ resource "aws_lb_target_group" "tg_app2" {
   protocol             = "HTTP"
   vpc_id               = aws_vpc.vpc.id
   deregistration_delay = 60
+  target_type          = "ip"
 
   health_check {
     path                = "/"

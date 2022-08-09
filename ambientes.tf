@@ -1,7 +1,3 @@
-#resource "random_id" "random_id_prefix" {
-#  byte_length = 2
-#}
-
 
 module "dev" {
   providers = {
@@ -40,7 +36,7 @@ module "dev" {
 #   availability_zones   = local.region_az_list
 #   project_name         = var.project_name
 #   prod_ecs_task    = var.prod_ecs_task
-  # cluster_min_size = var.cluster_min_size
-  # cluster_max_size = var.cluster_max_size
-  # cluster_size     = var.cluster_size
+#   cluster_min_size = var.cluster_min_size
+#   cluster_max_size = var.cluster_max_size
+#   cluster_size     = var.cluster_size
 # }

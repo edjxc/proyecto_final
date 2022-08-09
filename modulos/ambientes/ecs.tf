@@ -59,15 +59,12 @@ resource "aws_cloudwatch_log_group" "logs_app2" {
   name = replace(var.app2_ecs_task.log_group, "%appname%", local.nombre)
 }
 
-#--------------------------------------------------------------
-# ECS Services
-#--------------------------------------------------------------
 resource "aws_ecs_service" "service_app1" {
   name            = "${local.nombre}-app1"
   cluster         = aws_ecs_cluster.ecs_cluster.name
   task_definition = aws_ecs_task_definition.task_app1.arn
   desired_count   = 1
-  iam_role        = data.aws_iam_role.AWSServiceRoleForECS.arn
+  #iam_role        = data.aws_iam_role.AWSServiceRoleForECS.arn
   depends_on      = [aws_lb_listener.http_app1, aws_cloudwatch_log_group.logs_app1]
 
   deployment_maximum_percent         = 200
@@ -78,10 +75,15 @@ resource "aws_ecs_service" "service_app1" {
     field = "attribute:ecs.availability-zone"
   }
 
+  network_configuration  {
+    subnets   = aws_subnet.public_subnet[*].id
+    security_groups = [aws_security_group.sg-alb.id]
+  }
+  
   load_balancer {
     target_group_arn = aws_lb_target_group.tg_app1.arn
     container_name   = var.app1_ecs_task.container_name
-    container_port   = 80
+    container_port   = 8080
   }
 
   lifecycle {
@@ -94,11 +96,16 @@ resource "aws_ecs_service" "service_app2" {
   cluster         = aws_ecs_cluster.ecs_cluster.name
   task_definition = aws_ecs_task_definition.task_app2.arn
   desired_count   = 1
-  iam_role        = data.aws_iam_role.AWSServiceRoleForECS.arn
+  #iam_role        = data.aws_iam_role.AWSServiceRoleForECS.arn
   depends_on      = [aws_lb_listener.http_app2, aws_cloudwatch_log_group.logs_app2]
 
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100
+
+  network_configuration  {
+    subnets   = aws_subnet.public_subnet[*].id
+    security_groups = [aws_security_group.sg-alb.id]
+  }
 
   deployment_controller {
     type = "CODE_DEPLOY"
@@ -112,7 +119,7 @@ resource "aws_ecs_service" "service_app2" {
   load_balancer {
     target_group_arn = aws_lb_target_group.tg_app2.arn
     container_name   = var.app2_ecs_task.container_name
-    container_port   = 80
+    container_port   = 8080
   }
 
   lifecycle {
